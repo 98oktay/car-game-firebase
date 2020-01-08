@@ -1,0 +1,111 @@
+body {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: #ffffff;
+}
+
+
+.car {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100px;
+  height: 100px;
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+
+  &-body {
+    background: url(../img/car6.png) center no-repeat;
+    background-size: contain;
+    width: 100px;
+    height: 100px;
+    transition: transform 0.2s ease-out;
+    &-model-1 {
+      background-image: url(../img/car1.png);
+    }
+    &-model-2 {
+      background-image: url(../img/car2.png);
+    }
+    &-model-3 {
+      background-image: url(../img/car3.png);
+    }
+    &-model-4 {
+      background-image: url(../img/car4.png);
+    }
+    &-model-5 {
+      background-image: url(../img/car5.png);
+    }
+    &-model-6 {
+      background-image: url(../img/car6.png);
+    }
+  }
+
+}
+
+@keyframes to-fire {
+  0% {
+    transform: translateY(0);
+    opacity: 0
+  }
+  10% {
+    opacity: 1
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-1000px);
+    opacity: 0;
+  }
+}
+
+
+.game-area {
+  width: 1000px;
+  height: 1000px;
+}
+
+.bullet {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100px;
+  height: 100px;
+
+  .bullet-direction {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+  }
+
+  &-direction-90 {
+    transform: rotate(90deg);
+  }
+
+  &-direction-180 {
+    transform: rotate(180deg);
+  }
+
+  &-direction-270 {
+    transform: rotate(270deg);
+  }
+
+  &-fire {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    margin-left: -22px;
+    margin-top: -22px;
+    background: url(../img/fire.png) center no-repeat;
+    background-size: contain;
+    opacity: 0;
+    animation-name: to-fire;
+    animation-duration: 2s;
+  }
+
+}
