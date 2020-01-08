@@ -14,23 +14,36 @@ export default class Player extends React.Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        if (!this.props.me) {
+            if (JSON.stringify(this.state.position) !== JSON.stringify(nextProps.position) || JSON.stringify(this.state.rotation) !== JSON.stringify(nextProps.rotation)) {
+                this.setState({
+                    position: {...nextProps.position},
+                    rotation: nextProps.rotation
+                })
+
+            }
+        }
+        return true;
+    }
+
     keyDownHandler = (event) => {
-        console.log(event.keyCode);
+
         switch (event.keyCode) {
             case 37:
-                this.setState(({rotation}) => {
-                    rotation = rotation - 90;
+                this.setState(({rotation: prevRotation}) => {
+                    const {rotation, direction} = this.rotateCar(prevRotation, -1);
                     return {
-                        direction: (720 + rotation % 360) % 360,
+                        direction,
                         rotation
                     }
                 });
                 break;
             case 39:
-                this.setState(({rotation}) => {
-                    rotation = rotation + 90;
+                this.setState(({rotation: prevRotation}) => {
+                    const {rotation, direction} = this.rotateCar(prevRotation, 1);
                     return {
-                        direction: (720 + rotation % 360) % 360,
+                        direction,
                         rotation
                     }
                 });
@@ -59,6 +72,18 @@ export default class Player extends React.Component {
         }
     };
 
+    rotateCar = (rotation, direction) => {
+        rotation = rotation + 90 * direction;
+        if (this.props.playerRef) {
+            this.props.playerRef.update({
+                rotation
+            })
+        }
+        return {
+            direction: (720 + rotation % 360) % 360,
+            rotation
+        }
+    };
     moveCar = (position, direction, amount) => {
         let {x, y} = position;
 
@@ -80,6 +105,11 @@ export default class Player extends React.Component {
         x = Math.max(0, Math.min(x, 900));
         y = Math.max(0, Math.min(y, 900));
 
+        if (this.props.playerRef) {
+            this.props.playerRef.update({
+                position: {x, y}
+            })
+        }
         return {x, y}
     };
 
@@ -87,8 +117,9 @@ export default class Player extends React.Component {
     render() {
         const {direction, rotation, position} = this.state;
         return <div className={`car car-direction-${direction}`}
-                    style={{transform: `translateY(${position.y*100}px) translateX(${position.x*100}px)`}}>
-            <div className={`car-body car-body-model-${this.props.model||1}`} style={{transform: `rotate(${rotation}deg)`}}/>
+                    style={{transform: `translateY(${position.y * 100}px) translateX(${position.x * 100}px)`}}>
+            <div className={`car-body car-body-model-${this.props.model || 1}`}
+                 style={{transform: `rotate(${rotation}deg)`}}/>
         </div>
     }
 }
